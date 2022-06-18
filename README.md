@@ -2,6 +2,57 @@ MIT License
 
 Copyright (c) 2022 OlympiCloud by WECREATIVE DIGITAL
 
+```c#
+app.MapPost("/login", [AllowAnonymous] async
+    ([FromBodyAttribute] Users userModel, TokenService tokenService, IUserRepositoryService userRepositoryService, HttpResponse response, DbContextMaster db) =>
+{
+
+    dynamic userDto = null;
+
+    if (userModel.dni != null)
+    {
+        userDto = userRepositoryService.GetUser(userModel, db);
+    }
+
+    if (userDto == null)
+    {
+        response.StatusCode = 401;
+        return;
+    }
+    var token = tokenService.BuildToken(builder.Configuration["Jwt:ServerSecret"], builder.Configuration["Jwt:Issuer"], builder.Configuration["Jwt:Audience"], userDto);
+    string role = userDto.FK_role.ToString();
+    string verification = userDto.verification.ToString();
+    string birthday = userDto.birthday.ToString();
+    string createAt = userDto.created_at.ToString();
+    string updateAt = userDto.update_at.ToString();
+    string is_active = userDto.is_active.ToString();
+    string id = userDto.Id.ToString();
+    await response.WriteAsJsonAsync(new
+    {
+        Id = id,
+        Username = userDto.username,
+        Password = userDto.password,
+        Firstname = userDto.firstname,
+        Lastname = userDto.lastname,
+        Brithday = birthday,
+        DNI = userDto.dni,
+        Phone = userDto.phone,
+        Email = userDto.email,
+        Photo = userDto.photo,
+        FK_role = role,
+        Verification = verification,
+        Is_active = is_active,
+        Created_at = createAt,
+        Update_at = updateAt,
+        Token = token
+    });
+
+    return;
+}).Produces(StatusCodes.Status200OK)
+.WithName("Login").WithTags("Accounts");
+```
+
+
 Por la presente se concede permiso, sin cargo, a cualquier persona que obtenga acceso
 al sistema OlympiaCloud para fines comunitarios sin que perjudique la integridad de
 ninguna institución y/o empresa registrada o asociada a nuestro sistema.
