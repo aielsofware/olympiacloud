@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2022 OlympiCloud by WECREATIVE DIGITAL
+Copyright (c) 2022 OlympiaCloud by WECREATIVE DIGITAL
 
 Por la presente se concede permiso, sin cargo, a cualquier persona que obtenga acceso
 al sistema OlympiaCloud para fines comunitarios sin que perjudique la integridad de
